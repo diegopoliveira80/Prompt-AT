@@ -47,6 +47,11 @@ class Gemini(object):
         return response
 
 
+##################################################### ex_07
+    def llm_ex_07(self,prompt):
+        response=self.model.generate_content(prompt)
+        return response
+
 
 
 

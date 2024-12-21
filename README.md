@@ -57,9 +57,6 @@ streamlit run src/dashboard.py
 
 Após o passo a passo acima a aplicação estará funcionando em seu localhost
 
-# Exemplos de entrada e saída das funcionalidades.
-
-
 
 # Conclusão
 A aplicação foi desenvolvida com o objetivo de trazer experiencias com LLMs, utilizando alguns prompts instruindo a LLM a abrir dados de uma API e realizar diversas analises que a propria LLM indicar.

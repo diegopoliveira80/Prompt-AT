@@ -102,7 +102,7 @@ def process_ex_05():
     return resultado5, response_ex5
 
     
-def process_ex_06():
+def process_ex_06e07():
     #1 prompt
     resultado6=dataprev.ex_06('prompt').text
     
@@ -114,15 +114,15 @@ def process_ex_06():
     resultado_final = dataprev.ex_06_prompt3(response_ex06).text
     response_final = resultado_final.replace('```python',"").replace('```',"")
     
-    return response_final, resultado_final
+    #Exercicio 07
+    resultado_final_exer07 = dataprev.ex_07(response_final).text
+    response_final_exer07 = resultado_final_exer07.replace('```python',"").replace('```',"")
+    
+    
+    return  response_final_exer07, resultado_final_exer07, resultado_final
 
 
-def process_ex_07():
-    if 'response_ex7' not in st.session_state:
-        st.session_state['response_ex7'] = st.write('vazio')
-    codigo = st.session_state['response_ex7']
-    response_ex5 = st.session_state['response_ex7']#.replace('```python',"").replace('```',"")
-    st.markdown(codigo)
+
     
 def process_ex_08():
     if 'response_ex8' not in st.session_state:
@@ -152,16 +152,15 @@ with st.container():
     EX_04_TAB,
     EX_05_TAB,
     EX_06_TAB,
-    EX_07_TAB,
     EX_08_TAB,
-    EX_09_TAB) = st.tabs(("EX_03", "EX_04", "EX_05", "EX_06", "EX_07", "EX_08", "EX_09"))
+    EX_09_TAB) = st.tabs(("EX_03", "EX_04", "EX_05", "EX_06 e 07", "EX_08", "EX_09"))
 
     with EX_03_TAB:
         if 'response_ex3' in st.session_state:
             exec(st.session_state['response_ex3'][1])
             st.markdown(st.session_state['response_ex3'][0])
             st.markdown(st.session_state['response_ex3'][2])
-        elif st.button("Executar EX_03",key='ex_03'):
+        elif st.button("Executar EX_03",key='ex_03_'):
             st.session_state['response_ex3'] = process_ex_03()
             exec(st.session_state['response_ex3'][1])
             st.markdown(st.session_state['response_ex3'][0])
@@ -237,8 +236,13 @@ with st.container():
 
     with EX_06_TAB:
         if 'response_ex6' in st.session_state:
-            st.write(st.session_state['response_ex6'][1])
             exec(st.session_state['response_ex6'][0])
+            
+            st.write('Codigo Chain-of-thoughts')
+            st.write(st.session_state['response_ex6'][1])
+            
+            st.write('Codigo Batch-prompting')
+            st.write(st.session_state['response_ex6'][2])
         elif st.button("Executar EX_06",key='ex_06'):
             success = False
             retries = 0
@@ -246,11 +250,16 @@ with st.container():
             while retries <=5 and success == False:
                 try:
                     # Processa os dados novamente e armazena na sessão
-                    st.session_state['response_ex6'] = process_ex_06()
+                    st.session_state['response_ex6'] = process_ex_06e07()
                     
                     # Exibe os dados processados
-                    st.write(st.session_state['response_ex6'][1])
                     exec(st.session_state['response_ex6'][0])
+                    
+                    st.write('Codigo Chain-of-thoughts')
+                    st.write(st.session_state['response_ex6'][1])
+                    
+                    st.write('Codigo Batch-prompting')
+                    st.write(st.session_state['response_ex6'][2])
                     
                     success = True
                 except Exception as e:
@@ -261,21 +270,14 @@ with st.container():
                         st.error("Máximo de tentativas atingido. Não foi possível concluir a execução.")
 
 
+######################################## Exercicio 07
 
-    with EX_07_TAB:
-        if st.button("Executar EX_07"):
-            process_ex_07()
-        else:
-            st.markdown(st.session_state.get('response_ex7', 'Nenhuma execução feita'))
 
     with EX_08_TAB:
         if st.button("Executar EX_08"):
-            process_ex_08()
-        else:
-            st.markdown(st.session_state.get('response_ex8', 'Nenhuma execução feita'))
+            process_ex_08('prompt')
+
 
     with EX_09_TAB:
         if st.button("Executar EX_09"):
-            process_ex_09()
-        else:
-            st.markdown(st.session_state.get('response_ex9', 'Nenhuma execução feita'))
+            process_ex_09('prompt')

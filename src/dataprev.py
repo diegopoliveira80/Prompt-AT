@@ -24,6 +24,7 @@ EX_03 = True
 EX_04 = True
 EX_05 = True
 EX_06 = True
+EX_07 = True
 
 ################################ 
 # REQUEST DOS DADOS
@@ -353,9 +354,9 @@ if EX_06:
         img = './docs/distribuicao_deputados.png'
         deputados = './data/insights_distribuicao_deputados.json'
         prompt3 = f"""
-        Com prompt: <{prompt2}>. Adicione na aba Despesas o conteudo do diretorio: {img} 
+        Com prompt: <{prompt2}>. Adicione na aba Overview o conteudo do diretorio: {img} 
         que está no formato png<imagem>.
-        Adicione na aba Proposições o conteudo do diretorio: {deputados} 
+        Adicione na aba Overview o conteudo do diretorio: {deputados} 
         que está no formato JSON.
         - Escrever somente o codigo, sem explicação.
         """
@@ -371,3 +372,39 @@ if EX_06:
                 generation_config = generation_config
             )
         return model.llm_ex_06(prompt3)
+    
+    
+    
+################################ EX_07
+if EX_07:
+    def ex_07(prompt1):
+        deputados = './data/insights_distribuicao_deputados.json'
+        dbfile = './data/serie_despesas_diárias_deputados1.parquet'
+        df_proposicoes = './data/proposicoes_deputados.parquet'
+        summary_proposicoes = 'data/sumarizacao_proposicoes.json'
+        prompt1 = f"""
+        Com a tecnica Batch-prompting preciso que você realize todas as etapas aseguir:
+        Com prompt: <{prompt1}>.
+        1. Adicione na Aba Despesas o conteudo di duretorio: {deputados}
+        2. A aba despesas deve conter um st.selectbox da coluna nome que esta no diretorio: {dbfile}
+        3. Agora adicione na Aba Despesas o gráfico de barras com a série temporal na coluna "dataDocumento" e  
+        o valor da coluna "valorDocumento" conforme deputado selecionado no st.selectbox
+        4. Na aba proposicoes abra o diretorio {df_proposicoes} no formato DataFrame 
+        5. Na ana proposicoes abra o diretorio {summary_proposicoes}
+        - Trate os dados codificado como UTF-8
+        - Não use set_page_config()
+        - Escrever somente o codigo, sem explicação.
+        """
+        
+        generation_config = {
+        'temperature': 0.6,
+        'max_output_tokens': 1000
+    }
+        model = tools.Gemini(
+                model_name = "gemini-1.5-pro",
+                apikey = os.getenv("GEMINI_API_KEY_PRO"),
+                system_prompt=prompt1,
+                generation_config = generation_config
+            )
+        return model.llm_ex_07(prompt1)
+    
